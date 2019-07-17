@@ -5,13 +5,40 @@ import './App.css';
 
 class App extends React.Component {
   state = {
-    firstName: '',
-    lastName: '',
-    isMarried: true,
+    valuesMap: {
+      firstName: '',
+      lastName: '',
+      isMarried: true,
+    },
+
+    errorsMap: {
+      firstName: '',
+      lastName: '',
+      isMarried: '',
+    }
   };
 
   handleFormSubmit = (event) => {
     event.preventDefault();
+
+    const errorsMap = {};
+
+    this.setState(state => {
+      if (!state.firstName) {
+        errorsMap.firstName = 'FirstName is required'
+      }
+
+      if (!state.lastName) {
+        errorsMap.lastName = 'LastName is required';
+      }
+
+      if (Object.keys(errorsMap).length > 0) {
+        return { errorsMap };
+      }
+
+      console.log(123);
+    })
+
   };
 
   handleFieldChange = (event) => {
@@ -23,18 +50,30 @@ class App extends React.Component {
   };
 
   render() {
+    const { valuesMap, errorsMap } = this.state;
+
     return (
       <div className="App">
         <h1>Static list of todos</h1>
 
         <form onSubmit={this.handleFormSubmit}>
-          <input
-            type="text"
-            name="firstName"
-            value={this.state.firstName}
-            placeholder="FirstName"
-            onChange={this.handleFieldChange}
-          />
+          <div className="form-field">
+            <label>
+              First name:
+              <input
+                type="text"
+                name="firstName"
+                value={valuesMap.firstName}
+                placeholder="FirstName"
+                onChange={this.handleFieldChange}
+              />
+            </label>
+            {errorsMap.firstName && (
+              <div className="error" style={{ color: 'red' }}>
+                {errorsMap.firstName}
+              </div>
+            )}
+          </div>
 
           <input
             type="text"

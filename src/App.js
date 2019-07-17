@@ -15,7 +15,7 @@ class App extends React.Component {
       firstName: '',
       lastName: '',
       isMarried: '',
-    }
+    },
   };
 
   handleFormSubmit = (event) => {
@@ -44,9 +44,20 @@ class App extends React.Component {
   handleFieldChange = (event) => {
     const { name, value, checked, type } = event.target;
 
-    this.setState({
-      [name]: (type === 'checkbox') ? checked : value,
+    this.setState(state => {
+      const valuesMap = { ...state.valuesMap };
+
+      valuesMap[name] = (type === 'checkbox') ? checked : value;
+
+      return { valuesMap };
     });
+
+    // this.setState(state => ({
+    //   valuesMap: {
+    //     ...state.valuesMap,
+    //     [name]: (type === 'checkbox') ? checked : value,
+    //   }
+    // }));
   };
 
   render() {
@@ -68,6 +79,7 @@ class App extends React.Component {
                 onChange={this.handleFieldChange}
               />
             </label>
+
             {errorsMap.firstName && (
               <div className="error" style={{ color: 'red' }}>
                 {errorsMap.firstName}
